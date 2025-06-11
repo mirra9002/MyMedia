@@ -3,7 +3,7 @@ import cors from 'cors'
 import {addAuthorToDataBase, getAllAuthorsFromDataBase, getAuthorByIdFromDataBase, editAuthorById, deleteAuthorById,
     getAllArticlesFromDataBase, getArticleByIdFromDataBase, addArticleToDataBase, editArticleById, deleteArticleById
 } from './database.js'
-import { validateAddAuthor, validateEditAuthor, validateAddArticle } from './validation.js'
+import { validateAddAuthor, validateEditAuthor, validateAddArticle, validateEditArticle } from './validation.js'
 import { randomUUID } from 'crypto'
 const app = express()
 app.use(express.json())
@@ -129,4 +129,24 @@ app.post('/article', async (req, res) => {
         res.send({message: "success", result: result})
     }
    
+})
+
+
+app.patch('/article/:id', async (req, res) => {
+    const data = req.body;
+    const articleId = req.params.id
+    
+    const isValid = validateEditArticle(data)
+    if(isValid.error != null){
+        res.status(422).send({message: isValid.error}) 
+        return
+    }
+
+    const result = await editArticleById(articleId, isValid.object)   
+    
+    if(!result){
+        res.status(404).send({message: "failed"}) 
+        return
+    } 
+    res.send({message: "success", result: result})
 })

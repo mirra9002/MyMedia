@@ -92,3 +92,39 @@ export function validateAddArticle(data) {
 
   return {object: data, error: null}
 }
+
+
+export function validateEditArticle(data) {
+    if(!(Object.keys(data).length > 0)){
+        return {object: null, error: "empty string"} 
+    }
+    const schemaEditArticle = {
+    type: "object",
+    properties: {
+        title: {type: "string"},
+        description: {type: "string"},
+        content: {type: "string"},
+        date_created: {type: "string"},
+        type: {type: "string"},
+        reading_time: {type: "number"},
+        views: {type: "number"},
+        author_id: {type: "string"},
+      },
+      additionalProperties: false
+    }
+
+    const isValid = ajv.validate(schemaEditArticle, data);
+    
+    if(!isValid){
+        return {object: null, error: ajv.errors[0].message} 
+    } 
+    
+    // data.firstName ? data.firstName = data.firstName.trim() : null
+    // data.lastName ? data.lastName = data.lastName.trim() : null
+    // data.email ? data.email = data.email.trim().toLowerCase() : null
+
+    return {object: data, error: null}
+
+
+  
+}
