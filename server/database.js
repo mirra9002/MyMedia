@@ -50,16 +50,49 @@ export async function deleteAuthorById(authorId) {
 // ARTICLES:
 
 export async function getAllArticlesFromDataBase() {
-    const [result] = await connection.query('SELECT * FROM articles');
-    return result
+    const [result] = await connection.query(`
+        SELECT 
+            articles.id AS article_id,
+            articles.title,
+            articles.description,
+            articles.content,
+            articles.date_created,
+            articles.views,
+            authors.id AS author_id,
+            authors.first_name,
+            authors.last_name,
+            authors.email,
+            authors.date_registered
+        FROM articles
+        JOIN authors ON articles.author_id = authors.id
+        ORDER BY articles.date_created DESC;
+    `);
+
+    return result;
 }
+
 
 export async function getArticleByIdFromDataBase(articleId) {
     const [result] = await connection.query(`
-        SELECT * FROM articles
-        WHERE id=?`, [articleId]);
-    return result
+        SELECT 
+            articles.id AS article_id,
+            articles.title,
+            articles.content,
+            articles.date_created,
+            articles.views,
+            authors.id AS author_id,
+            authors.first_name,
+            authors.last_name,
+            authors.email,
+            authors.date_registered
+        FROM articles
+        JOIN authors ON articles.author_id = authors.id
+        WHERE articles.id = ?;
+    `, [articleId]);
+
+    return result;
 }
+
 
 export async function addArticleToDataBase(article) {
     const result = await connection.query(`

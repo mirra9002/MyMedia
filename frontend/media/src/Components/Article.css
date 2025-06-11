@@ -1,0 +1,22 @@
+#div-article {
+    border: 1px solid;
+    border-radius: 10px;
+  padding: 10px;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+h2 {
+  font-size: 18px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+}

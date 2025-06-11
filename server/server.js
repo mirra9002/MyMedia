@@ -150,3 +150,13 @@ app.patch('/article/:id', async (req, res) => {
     } 
     res.send({message: "success", result: result})
 })
+
+app.delete('/article/:id', async (req, res) => {
+    const articleId = req.params.id
+    const result = await deleteArticleById(articleId)
+    if(!result || result.affectedRows === 0){
+        res.status(404).send({message: "failed"}) 
+        return
+    }
+    res.send({message: 'success'})
+})

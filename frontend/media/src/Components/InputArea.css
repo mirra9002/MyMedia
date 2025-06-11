@@ -1,0 +1,27 @@
+#div-posting-article {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+#div-posting-article h2 {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+#div-posting-article input,
+#div-posting-article textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#div-posting-article textarea {
+  min-height: 120px;
+  resize: vertical;
+}
