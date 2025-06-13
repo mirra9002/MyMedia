@@ -6,6 +6,7 @@ export default function ArticleEditor() {
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [articleType, setArticleType] = useState('');
+  const [thumbnailImage, setThumbnailImage] = useState(null)
   function handleChangeTitle(e) {
     setTitle(e.target.value)
   }
@@ -25,7 +26,7 @@ export default function ArticleEditor() {
   async function handleSubmit() {
     const obj = {
       title: title,
-      description: "no description",
+      description: thumbnailImage,
       content: text,
       date_created: new Date().toString(),
       type: articleType,
@@ -67,6 +68,11 @@ export default function ArticleEditor() {
         <option value="review">Research</option>
         <option value="interview">Story</option>
       </select>
+    </div>
+    <div id="div-upload-thumbnail">
+      <button onClick={() => {
+          const url = prompt("Enter image URL");
+            if (url) setThumbnailImage(url)}}>Set thumbnail image</button>
     </div>
     <button onClick={handleSubmit}>Submit</button>
 

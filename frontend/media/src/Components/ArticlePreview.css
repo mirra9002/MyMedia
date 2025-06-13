@@ -1,23 +1,40 @@
+/* Article preview container */
 #div-article {
-    border: 1px solid;
-    border-radius: 10px;
-  padding: 10px;
-  font-family: sans-serif;
+  max-width: 720px;
+  margin: 1rem auto;
+  padding: 1rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fdfdfd;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 5px;
+/* Hover effect */
+#div-article:hover {
+  background-color: #f9f9f9;
+  border-color: #bbb;
 }
 
-h2 {
-  font-size: 18px;
-  color: gray;
-  margin-bottom: 10px;
+/* Title styling */
+#div-article h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #222;
 }
 
-p {
-  font-size: 16px;
-  line-height: 1.5;
+/* Author name styling */
+#div-article p {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+#div-article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 1rem;
+  border-radius: 6px;
 }
