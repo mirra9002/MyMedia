@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import Article from "../Components/Article";
+import ArticlePreview from "../Components/ArticlePreview";
 import { useNavigate } from 'react-router-dom';
 
-
+import Header from "../Components/Header";
 
 export default function MainPage() {
+  const navigate = useNavigate()
   const[articles, setArticles] = useState()
   useEffect(() => {
     const fetchData = async () => {
@@ -16,12 +17,15 @@ export default function MainPage() {
     fetchData()
   }, [])
 
+  function handleClick(location) {
+    navigate(location)
+  }
   
-
   return (
     <>
+    <Header/>
     <h1>Articles</h1>
-      {articles ? articles.map(article => <Article {...article}/>) : <p>Loading...</p>}
+      {articles ? articles.map(article => <ArticlePreview key={article.article_id} {...article} onClick={() => handleClick(`/article/${article.article_id}`)}/>) : <p>Loading...</p>}
     </>
   );
 }

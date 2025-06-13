@@ -20,6 +20,13 @@ export async function getAuthorByIdFromDataBase(authorId) {
     return result
 }
 
+export async function getAuthorByEmail(authorEmail) {
+    const [result] = await connection.query(`
+        SELECT * FROM authors
+        WHERE email=?`, [authorEmail]);
+        console.log('DB:',result);
+    return result
+}
 
 export async function addAuthorToDataBase(author) {
     const result = await connection.query(`
@@ -80,6 +87,7 @@ export async function getArticleByIdFromDataBase(articleId) {
             articles.content,
             articles.date_created,
             articles.views,
+            articles.reading_time,
             authors.id AS author_id,
             authors.first_name,
             authors.last_name,

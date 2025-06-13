@@ -3,9 +3,10 @@ import { createRoot } from 'react-dom/client'
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css'
-import App from './App.jsx'
+
 import MainPage from './Pages/MainPage.jsx'
 import PostingArticle from './Pages/PostingArticle.jsx';
+import Article from './Pages/Article.jsx';
 
 const router = createBrowserRouter([{
   path: '/',
@@ -14,6 +15,10 @@ const router = createBrowserRouter([{
 {
   path: '/newarticle',
   element: <PostingArticle />
+},
+{
+  path: '/article/:id',
+  element: <Article />
 }
 
 ])
