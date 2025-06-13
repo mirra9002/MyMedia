@@ -21,11 +21,13 @@ export default function MainPage() {
     navigate(location)
   }
   
+  if(!articles) return
+
   return (
     <>
     <Header/>
     <h1>Articles</h1>
-      {articles ? articles.map(article => <ArticlePreview key={article.article_id} {...article} onClick={() => handleClick(`/article/${article.article_id}`)}/>) : <p>Loading...</p>}
+    {articles.map(article => <ArticlePreview key={article.article_id} {...article} onClick={() => handleClick(`/article/${article.article_id}`)}/>)}
     </>
   );
 }

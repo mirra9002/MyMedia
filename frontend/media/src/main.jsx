@@ -7,6 +7,7 @@ import './index.css'
 import MainPage from './Pages/MainPage.jsx'
 import PostingArticle from './Pages/PostingArticle.jsx';
 import Article from './Pages/Article.jsx';
+import MyProfile from './Pages/MyProfile.jsx';
 
 const router = createBrowserRouter([{
   path: '/',
@@ -19,6 +20,10 @@ const router = createBrowserRouter([{
 {
   path: '/article/:id',
   element: <Article />
+},
+{
+  path: '/myprofile/:id',
+  element: <MyProfile />
 }
 
 ])

@@ -6,11 +6,17 @@
   background-color: #f5f5f5;
   border-bottom: 1px solid #ddd;
   font-family: Arial, sans-serif;
+  
 }
 
 #div-header p {
   margin: 0 12px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+#div-header p:hover {
+  color: #00548c;
 }
 
 #ul-header {
@@ -19,6 +25,7 @@
   margin: 0;
   padding: 0;
   gap: 16px;
+  cursor: pointer;
 }
 
 #ul-header li {

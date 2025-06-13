@@ -5,7 +5,11 @@ export default function Header() {
   function handleClick(location) {
     navigate(location)
   }
-  
+  function handleMyAccountClick() {
+    async function getUserId() {
+      
+    }
+  }
 
   return (
     <>
@@ -17,7 +21,7 @@ export default function Header() {
             <li>Analyzes</li> 
             <li>Interviews</li>
         </ul>
-        <p>My account</p>
+        <p onClick={() => handleClick('/myprofile')}>My account</p>
         <button onClick={() => handleClick('/newarticle')}>POST article</button>
       </div>
     </>

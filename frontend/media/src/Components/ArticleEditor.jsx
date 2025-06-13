@@ -36,7 +36,6 @@ export default function ArticleEditor() {
     const res = await postArticle(obj)
     if (res) {
     alert('Article submitted successfully!')
-    // Optionally clear form:
     setTitle(''); setText(''); setArticleType('');
   } else {
     alert('Error submitting article.')
@@ -82,6 +81,12 @@ function TextTypeChooser({ handleClick}) {
   
     <div id="div-text-type-chooser">
       <ul>
+        <li><button onClick={() => {
+          const url = prompt("Enter image URL");
+            if (url) handleClick(`![alt text](${url})`);
+          }}>Insert Image</button>
+        </li>
+
         <li><button onClick={() => handleClick("# ")}>Heading 1</button></li>
         <li><button onClick={() => handleClick("## ")}>Heading 2</button></li>
         <li><button onClick={() => handleClick("### ")}>Heading 3</button></li>

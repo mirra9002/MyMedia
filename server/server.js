@@ -173,64 +173,72 @@ app.delete('/article/:id', async (req, res) => {
 
 // AUTHENTICATION + AUTHORIZATION
 
-app.post('/register', async (req, res) => {
-    const data = req.body
-    console.log(data);
-    const isValid = validateAddAuthor(data)
-    if(isValid.error != null){
-        res.status(422).send({message: isValid.error}) 
-        return
-    } 
-    const author = await getAuthorByEmail(data.email);
-    if(author.length > 0) {
-        res.status(422).send({message: "user already exists"}) 
-        return
-    }
+// app.post('/register', async (req, res) => {
+//     const data = req.body
+//     console.log(data);
+//     const isValid = validateAddAuthor(data)
+//     if(isValid.error != null){
+//         res.status(422).send({message: isValid.error}) 
+//         return
+//     } 
+//     const author = await getAuthorByEmail(data.email);
+//     if(author.length > 0) {
+//         res.status(422).send({message: "user already exists"}) 
+//         return
+//     }
     
-    const password = data.password;
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     const password = data.password;
+//     const hashedPassword = await bcrypt.hash(password, 10);
     
-    const result = await addAuthorToDataBase({...isValid.object, password: hashedPassword, id: randomUUID()})
-    res.send({message: "success", result: result})
-})
+//     const result = await addAuthorToDataBase({...isValid.object, password: hashedPassword, id: randomUUID()})
+//     res.send({message: "success", result: result})
+// })
 
-app.post('/login', async (req, res) => {
-    const data = req.body;
-    console.log(data);
-    const isValid = validateAddAuthor(data)
-    if(isValid.error != null){
-        res.status(422).send({message: isValid.error}) 
-        return
-    } 
-    const author = await getAuthorByEmail(data.email);
-    if(author.length === 0) {
-        res.status(422).send({message: "User not found"}) 
-        return
-    }
+// app.post('/login', async (req, res) => {
+//     const data = req.body;
+//     console.log(data);
+//     const isValid = validateAddAuthor(data)
+//     if(isValid.error != null){
+//         res.status(422).send({message: isValid.error}) 
+//         return
+//     } 
+//     const author = await getAuthorByEmail(data.email);
+//     if(author.length === 0) {
+//         res.status(422).send({message: "User not found"}) 
+//         return
+//     }
 
-    const passwordIsValid = bcrypt.compare(isValid.data.password, author.password);
-    if(!passwordIsValid){
-        res.status(401).send({message: "Incorrect password"}) 
-    }
+//     const passwordIsValid = bcrypt.compare(isValid.data.password, author.password);
+//     if(!passwordIsValid){
+//         res.status(401).send({message: "Incorrect password"}) 
+//     }
 
-    const accessToken = jwt.sign({email: isValid.object.email}, SECRET_KEY, {expiresIn: '15m'});
-    const refreshToken = jwt.sign({email: isValid.object.email}, SECRET_KEY, {expiresIn: '7d'});
-
-
-    // add tokens to DB (???)
-
-    res.send({
-        accessToken: accessToken,
-        refreshToken: refreshToken
-    });
+//     const accessToken = jwt.sign({email: isValid.object.email}, SECRET_KEY, {expiresIn: '15m'});
+//     const refreshToken = jwt.sign({email: isValid.object.email}, SECRET_KEY, {expiresIn: '7d'});
 
 
-})
+//     // add tokens to DB (???)
 
-app.get('/me', authMiddlware, async (req, res) => {
-    
-    res.send(req.user.email)
-})
+//     res.send({
+//         accessToken: accessToken,
+//         refreshToken: refreshToken
+//     });
+
+
+// })
+
+app.post('/myprofile', async (req, res) => {
+  const userId = req.body.userId;
+  if (!userId) {
+    return res.status(401).send({ message: "No id provided" });
+  }
+  const user = await getAuthorByIdFromDataBase(userId);
+  if (!user) {
+    return res.status(401).send({ message: "User not found" });
+  }
+
+  res.send(user);
+});
 
 
 function authMiddlware(req, res, next) {
