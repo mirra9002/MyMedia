@@ -6,6 +6,11 @@ import Header from '../Components/Header'
 export default function MyProfile() {
     const [userData, setUserData] = useState(null)
     useEffect(() => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        window.location.href = '/auth';
+        return;
+      }
       async function getUserData() {
         const res = await fetchWithAuth('http://localhost:3000/myprofile')
         const data = await res.json();
@@ -24,6 +29,8 @@ export default function MyProfile() {
     console.log('userData:',userData);
 
     if (!userData) return
+
+    
 
     return (
     <>

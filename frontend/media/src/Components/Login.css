@@ -25,7 +25,7 @@
   font-size: 0.95rem;
 }
 
-#div-login input[type="text"] {
+#div-login input{
   width: 100%;
   padding: 0.6rem;
   border: 1px solid #bbb;
@@ -66,25 +66,36 @@
   color: #007bff;
   text-decoration: none;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #div-log-instead a:hover {
   text-decoration: underline;
 }
 
-/* Status messages */
-#p-success {
-  font-size: 16px;
-  margin-top: 0.5rem;
-  color: #1cd200;
-  text-align: center;
-
+.success {
+ font-size: 16px;
+  color: #1ac100;
 }
 
-#p-error {
-  font-size: 16px;
-  margin-top: 0.5rem;
-  color: #d80202;
-  text-align: center;
 
+.input-error {
+  border: 1px solid #bd0000 !important;
+  box-shadow: 0 0 4px rgba(166, 0, 0, 0.5);
+  outline: none;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c40000 !important;
+  margin-top: 1rem;
+  text-align: left;
+  justify-content: center; /* center it horizontally */
+}
+
+.error img {
+  width: 20px;
+  height: 20px;
 }

@@ -1,4 +1,5 @@
 import './Signup.css'
+import errorImage from '../../public/red_error.svg'
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 export default function Signup({switchToLogin}) {
@@ -41,12 +42,12 @@ export default function Signup({switchToLogin}) {
             setUserData({ firstName: '', lastName: '', email: '', password: '' });
         }
         
-        // if(successMessage){
-        //     const times = setTimeout(() => {
-        //         navigate('/')
-        //     }, 500)
+        if(successMessage){
+            const times = setTimeout(() => {
+                window.location.href = '/';
+            }, 500)
             
-        // }
+        }
 
 
   return (
@@ -55,19 +56,19 @@ export default function Signup({switchToLogin}) {
         <h2>Sign Up</h2>
         <ul>
             <li>First Name</li>
-            <li><input type="text" name="firstName" onChange={handleChange} value={userData.firstName}/></li>
+            <li><input type="text" name="firstName" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.firstName} required/></li>
             <li>Last Name</li>
-            <li><input type="text" name="lastName" onChange={handleChange} value={userData.lastName}/></li>
+            <li><input type="text" name="lastName" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.lastName} required/></li>
             <li>Email</li>
-            <li><input type="text" name="email" onChange={handleChange} value={userData.email}/></li>
+            <li><input type="email" name="email" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.email} required/></li>
             <li>Password</li>
-            <li><input type="text" name="password" onChange={handleChange} value={userData.password}/></li>
+            <li><input type="password" name="password" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.password} required /></li>
         </ul>
         <button onClick={handleClick}>Sign Up</button>
         <div id="div-log-instead">
             <p>Already have an account? <a onClick={switchToLogin}>LOGIN</a></p>
-            {errorMessage ? <p id='p-error'>{errorMessage}</p> : null}
-            {successMessage ? <p id='p-success'>{successMessage}</p> : null}
+            {errorMessage ? <p className="error"><img src={errorImage} alt="" />{errorMessage}</p> : null}
+            {successMessage ? <p className="success">{successMessage}</p> : null}
         </div>
         
       </div>

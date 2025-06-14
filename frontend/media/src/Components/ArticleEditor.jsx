@@ -1,125 +1,89 @@
-import React, { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
 import './ArticleEditor.css'
+import { useRef, useState } from 'react';
 
-export default function ArticleEditor() {
-  const [title, setTitle] = useState('')
-  const [text, setText] = useState('')
+export default function ArticleEditor({ onSubmit, thumbnailImage, setThumbnailImage }) {
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
   const [articleType, setArticleType] = useState('');
-  const [thumbnailImage, setThumbnailImage] = useState(null)
-  function handleChangeTitle(e) {
-    setTitle(e.target.value)
-  }
-  function handleChangeText(e) {
-    setText(e.target.value)
-  }
-
-  function handleTextFormattingChange(type) {
-    const prevText = text;
-    const currentText = `${prevText}${type}`
-    setText(currentText)
-  }
-  function handleArticleTypeChange(e) {
-    setArticleType(e.target.value)
-  }
-  
-  async function handleSubmit() {
-    const obj = {
-      title: title,
-      description: thumbnailImage,
+  const [textType, setTextType] = useState(null)
+  function handleSubmit() {
+    const articleData = {
+      title,
       content: text,
-      date_created: new Date().toDateString(),
       type: articleType,
-      reading_time: Math.round(text.length / 100),
-      views: 0,
-      author_id: 'fcc25105-d212-4aa7-a527-1ae8845b855b'
-    }
-    const res = await postArticle(obj)
-    if (res) {
-    alert('Article submitted successfully!')
-    setTitle(''); setText(''); setArticleType('');
-  } else {
-    alert('Error submitting article.')
-  }
+    };
+    onSubmit(articleData);
+    setTitle('');
+    setText('');
+    setArticleType('');
   }
 
-  return (<>
-    <TextTypeChooser handleClick={handleTextFormattingChange}/>
-    <div id="div-writing-area">
-      <div id="div-title">
-        <h2>Title</h2>
-        <input type="text" name="title" onChange={handleChangeTitle} value={title}/>
+  return (
+    <>
+      <TextTypeChooser handleClick={(type) => {
+        setText(prev => prev + type);
+        setTextType(type);
+      }} textType={textType}/>
+      <div id="div-writing-area">
+        <div id="div-title">
+          <h2>Title</h2>
+          <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
+        </div>
+        <hr />
+        <div id="div-content">
+          <h2>Article</h2>
+          <textarea value={text} onChange={e => setText(e.target.value)} />
+        </div>
       </div>
-      <hr />
-      <div id="div-content">
-        <h2>Article</h2>
-        <textarea type="text" name="content" onChange={handleChangeText}  value={text}/>
+      <div className="markdown-preview">
+        <ReactMarkdown>{text}</ReactMarkdown>
       </div>
-    </div>
-    <div className="markdown-preview">
-      <ReactMarkdown>{text}</ReactMarkdown>
-    </div>
-    <div id="div-type">
-      <h2>Choose article type</h2>
-      <select value={articleType} onChange={handleArticleTypeChange}>
-        <option value="">Choose type</option>
-        <option value="news">News</option>
-        <option value="blog">History</option>
-        <option value="review">Research</option>
-        <option value="interview">Story</option>
-      </select>
-    </div>
-    <div id="div-upload-thumbnail">
-      <button onClick={() => {
+      <div id="div-type">
+        <h2>Choose article type</h2>
+        <select value={articleType} onChange={e => setArticleType(e.target.value)}>
+          <option value="">Choose type</option>
+          <option value="news">News</option>
+          <option value="blog">History</option>
+          <option value="review">Research</option>
+          <option value="interview">Story</option>
+        </select>
+      </div>
+      <div id="div-upload-thumbnail">
+        <button onClick={() => {
           const url = prompt("Enter image URL");
-            if (url) setThumbnailImage(url)}}>Set thumbnail image</button>
-    </div>
-    <button onClick={handleSubmit}>Submit</button>
-
+          if (url) setThumbnailImage(url);
+        }}>Set thumbnail image</button>
+      </div>
+      <button onClick={handleSubmit}>Submit</button>
     </>
-  )
+  );
 }
 
 
-function TextTypeChooser({ handleClick}) {
-  
-  return<>
-  
+function TextTypeChooser({ handleClick, textType }) {
+
+  return (
     <div id="div-text-type-chooser">
       <ul>
-        <li><button onClick={() => {
+      <li>
+        <button onClick={() => {
           const url = prompt("Enter image URL");
-            if (url) handleClick(`![alt text](${url})`);
-          }}>Insert Image</button>
-        </li>
-
-        <li><button onClick={() => handleClick("# ")}>Heading 1</button></li>
-        <li><button onClick={() => handleClick("## ")}>Heading 2</button></li>
-        <li><button onClick={() => handleClick("### ")}>Heading 3</button></li>
-        <li><button onClick={() => handleClick("")}>Text</button></li>
-      </ul>
+          if (url) handleClick(`![alt text](${url})`);
+        }}>
+          Insert Image
+        </button>
+      </li>
+      <li><button onClick={() => handleClick("# ")} className={textType === "# " ? "active" : ""}>Heading 1</button></li>
+      <li><button onClick={() => handleClick("## ")} className={textType === "## " ? "active" : ""}>Heading 2</button></li>
+      <li><button onClick={() => handleClick("### ")} className={textType === "### " ? "active" : ""}>Heading 3</button></li>
+      <li><button onClick={() => handleClick("- ")} className={textType === "- " ? "active" : ""}>Bullet</button></li>
+      <li><button onClick={() => handleClick("1. ")} className={textType === "1. " ? "active" : ""}>Numbered</button></li>
+      <li><button onClick={() => handleClick("> ")} className={textType === "> " ? "active" : ""}>Quote</button></li>
+      <li><button onClick={() => handleClick("")} className={textType === "" ? "active" : ""}>Text</button></li>
+    </ul>
     </div>
-    </>
+  );
 }
 
-async function postArticle(inputData) {
-  try {
-    const res = await fetch('http://localhost:3000/article', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(inputData)
-    })
 
-    if (!res.ok) {
-      throw new Error('Failed to post article')
-    }
-
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.error(err)
-    return null
-  }
-}

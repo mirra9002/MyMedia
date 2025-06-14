@@ -25,7 +25,7 @@
   font-size: 0.95rem;
 }
 
-#div-signup input[type="text"] {
+#div-signup input {
   width: 100%;
   padding: 0.6rem;
   border: 1px solid #bbb;
@@ -54,17 +54,33 @@
 /* Bottom log-in prompt */
 #div-log-instead {
   text-align: center;
+  
 }
 
 
-
-#p-success {
+.success {
  font-size: 16px;
-  color: #1ac100;
+  color: #1ac100 !important;
 }
 
 
-#p-error {
- font-size: 16px;
-  color: #c40000;
+.input-error {
+  border: 1px solid #bd0000 !important;
+  box-shadow: 0 0 4px rgba(166, 0, 0, 0.5);
+  outline: none;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c40000 !important;
+  margin-top: 1rem;
+  text-align: left;
+  justify-content: center; /* center it horizontally */
+}
+
+.error img {
+  width: 20px;
+  height: 20px;
 }

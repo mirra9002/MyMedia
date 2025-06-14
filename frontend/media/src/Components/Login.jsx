@@ -1,6 +1,7 @@
 import './Login.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import errorImage from '../../public/red_error.svg'
 export default function Login({switchToSignup}) {
   const navigate = useNavigate()
 
@@ -42,27 +43,27 @@ export default function Login({switchToSignup}) {
 
         
         
-        // if(successMessage){
-        //     const times = setTimeout(() => {
-        //         navigate('/')
-        //     }, 500)
+        if(successMessage){
+            const times = setTimeout(() => {
+                window.location.href = '/';
+            }, 500)
             
-        // }
+        }
   return (
     <>
       <div id="div-login">
         <h2>Log In</h2>
         <ul>
             <li>Email</li>
-            <li><input type="text" name="email" onChange={handleChange} value={userData.email}/></li>
+            <li><input type="email" className={errorMessage? "input-error" : null} name="email" onChange={handleChange} value={userData.email}/></li>
             <li>Password</li>
-            <li><input type="text" name="password" onChange={handleChange} value={userData.password}/></li>
+            <li><input type="password" className={errorMessage? "input-error" : null} name="password" onChange={handleChange} value={userData.password}/></li>
         </ul>
         <button onClick={handleClick}>Log In</button>
         <div id="div-log-instead">
             <p>Don't have an account? <a  onClick={switchToSignup}>SIGNUP</a></p>
-            {errorMessage ? <p id='p-error'>{errorMessage}</p> : null}
-            {successMessage ? <p id='p-success'>{successMessage}</p> : null}
+            {errorMessage ? <p className="error"><img src={errorImage} alt="" />{errorMessage}</p> : null}
+            {successMessage ? <p className="success">{successMessage}</p> : null}
         </div>
         
       </div>

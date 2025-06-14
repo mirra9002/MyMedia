@@ -1,60 +1,91 @@
-#div-header {
+.header {
+  width: 120%;
+  margin-left: -10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 18px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
-  font-family: Arial, sans-serif;
-  
-}
+  padding: 0 2rem;
+  height: 60px;
 
-#div-header p {
-  margin: 0 12px;
-  font-weight: bold;
+ margin-bottom: 1.5rem; /* ⬅ Add space below */
+}
+.header-left {
   cursor: pointer;
 }
 
-#div-header p:hover {
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+  transition: color 0.2s ease;
+}
+
+.logo:hover {
   color: #00548c;
 }
 
-#ul-header {
+/* Center Section */
+.header-center {
+  flex: 1;
   display: flex;
+  justify-content: center;
+}
+
+.nav-list {
+  display: flex;
+  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 16px;
-  cursor: pointer;
 }
 
-#ul-header li {
+.nav-list li {
+  font-size: 1rem;
+  color: #333;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
-#ul-header li:hover {
+.nav-list li:hover {
   color: #007acc;
 }
 
-#div-header button {
-  padding: 8px 12px;
+/* Right Section */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.my-account {
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.my-account:hover {
+  color: #007acc;
+}
+
+.post-article {
+  padding: 0.45rem 1rem;
   background-color: #007acc;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
-#div-header button:hover {
-  background-color: #005f99;
+.post-article:hover {
+  background-color: #00548c;
 }
 
-#div-header img {
-  width: 100px;      /* or any size you prefer */
-  height: auto;
-  cursor: pointer;
-  margin-right: 1rem;
-  vertical-align: middle;
+.header-divider {
+  width: 100%;
+  height: 0.3px;
+  background-color: #252525; /* or any color you prefer */
+  margin-top: 0.5rem;
 }
