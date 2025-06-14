@@ -8,6 +8,7 @@ import MainPage from './Pages/MainPage.jsx'
 import PostingArticle from './Pages/PostingArticle.jsx';
 import Article from './Pages/Article.jsx';
 import MyProfile from './Pages/MyProfile.jsx';
+import Auth from './Pages/Auth.jsx';
 
 const router = createBrowserRouter([{
   path: '/',
@@ -22,8 +23,12 @@ const router = createBrowserRouter([{
   element: <Article />
 },
 {
-  path: '/myprofile/:id',
+  path: '/myprofile',
   element: <MyProfile />
+},
+{
+  path: '/auth',
+  element: <Auth />
 }
 
 ])

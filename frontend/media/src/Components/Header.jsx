@@ -1,3 +1,4 @@
+import logo from '../../public/my_media_logo.png'
 import { useNavigate } from 'react-router-dom';
 import './Header.css'
 export default function Header() {
@@ -7,14 +8,14 @@ export default function Header() {
   }
   function handleMyAccountClick() {
     async function getUserId() {
-      
+
     }
   }
 
   return (
     <>
       <div id="div-header">
-        <p onClick={() => handleClick('/')}>MyMedia</p>
+        <img src={logo} onClick={() => handleClick('/')}/>
         <ul id="ul-header">
             <li>News</li>
             <li>History</li>

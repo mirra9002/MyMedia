@@ -28,7 +28,7 @@ export default function ArticleEditor() {
       title: title,
       description: thumbnailImage,
       content: text,
-      date_created: new Date().toString(),
+      date_created: new Date().toDateString(),
       type: articleType,
       reading_time: Math.round(text.length / 100),
       views: 0,

@@ -28,6 +28,26 @@ export function validateAddAuthor(data) {
   return {object: data, error: null}
 }
 
+export function validateLoginAuthor(data) {
+    const schemaAddUser = {
+    type: "object",
+    required: ["email", "password"],
+    properties: {
+        email: {type: "string", minLength: 1},
+        password: {type: "string", minLength: 1},
+      }
+    }
+
+  const isValid = ajv.validate(schemaAddUser, data);
+  if(!isValid){
+    return {object: null, error: ajv.errors[0].message} 
+  } 
+
+  data.email = data.email.trim().toLowerCase()
+
+  return {object: data, error: null}
+}
+
 export function validateEditAuthor(data) {
   
   if(!(Object.keys(data).length > 0)){
