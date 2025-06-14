@@ -11,8 +11,10 @@ export default function PostingArticle() {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
       window.location.href = '/auth'; // redirect to login/signup
+      return
     }
   }, []);
+  
   useEffect(() => {
     async function getUser() {
       try {
@@ -54,7 +56,7 @@ export default function PostingArticle() {
       alert('Error submitting article.');
     }
   }
-
+  if(!user) return
   return (
     <>
       <Header />
