@@ -1,0 +1,26 @@
+#main-article {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+  transition: all 0.3s ease-in-out;
+}
+
+#main-article:hover {
+  transform: scale(1.03);
+}
+
+#main-article .article-preview {
+  font-size: 1.25rem; /* Make text bigger */
+}
+
+#main-article img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}

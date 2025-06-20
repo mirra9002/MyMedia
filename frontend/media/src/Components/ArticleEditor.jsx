@@ -2,21 +2,33 @@ import ReactMarkdown from 'react-markdown';
 import './ArticleEditor.css'
 import { useRef, useState } from 'react';
 
-export default function ArticleEditor({ onSubmit, thumbnailImage, setThumbnailImage }) {
+export default function ArticleEditor({ onSubmit }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [description, setDescription] = useState('')
   const [articleType, setArticleType] = useState('');
   const [textType, setTextType] = useState(null)
-  function handleSubmit() {
+  const [thumbnailImage, setThumbnailImage] = useState(null);
+  
+
+  async function handleSubmit() {
     const articleData = {
-      title,
+      title: title,
       content: text,
+      description: description,
       type: articleType,
+      thumbnail_image: thumbnailImage || 'no_image'
     };
-    onSubmit(articleData);
-    setTitle('');
-    setText('');
-    setArticleType('');
+
+    const res = await onSubmit(articleData);  // now this is awaited properly
+
+    if (res) {
+      setTitle('');
+      setText('');
+      setThumbnailImage('');
+    }
+
+    console.log(res);
   }
 
   return (
@@ -35,6 +47,10 @@ export default function ArticleEditor({ onSubmit, thumbnailImage, setThumbnailIm
           <h2>Article</h2>
           <textarea value={text} onChange={e => setText(e.target.value)} />
         </div>
+        <div id="div-description">
+          <h2>Description</h2>
+          <textarea value={description} onChange={e => setDescription(e.target.value)} />
+        </div>
       </div>
       <div className="markdown-preview">
         <ReactMarkdown>{text}</ReactMarkdown>
@@ -48,6 +64,9 @@ export default function ArticleEditor({ onSubmit, thumbnailImage, setThumbnailIm
           <option value="review">Research</option>
           <option value="interview">Story</option>
         </select>
+      </div>
+      <div id="div-thumbnail">
+          {thumbnailImage ? <img src={thumbnailImage} className="thumbnail-preview"/> : null}
       </div>
       <div id="div-upload-thumbnail">
         <button onClick={() => {

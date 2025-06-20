@@ -61,7 +61,7 @@ export default function Login({switchToSignup}) {
         </ul>
         <button onClick={handleClick}>Log In</button>
         <div id="div-log-instead">
-            <p>Don't have an account? <a  onClick={switchToSignup}>SIGNUP</a></p>
+            <p>Ще не маєш аккаунта? <a  onClick={switchToSignup}>SIGN UP</a></p>
             {errorMessage ? <p className="error"><img src={errorImage} alt="" />{errorMessage}</p> : null}
             {successMessage ? <p className="success">{successMessage}</p> : null}
         </div>

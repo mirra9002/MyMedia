@@ -6,7 +6,7 @@ export default function Signup({switchToLogin}) {
 
     const navigate = useNavigate()
 
-    const [userData, setUserData] = useState({firstName: '', lastName: '', email: '', password: ''})
+    const [userData, setUserData] = useState({ email: '', password: '', username: ''})
     const [errorMessage, setErrorMessage] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
     console.log('aaa');
@@ -19,11 +19,10 @@ export default function Signup({switchToLogin}) {
 
     async function handleClick() {
         const obj = {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
             email: userData.email,
+            username: userData.username,
             password: userData.password,
-            dateRegistered: new Date().toDateString(),
+            date_registered: new Date().toDateString(),
         };
 
         console.log('OBJ:', obj);
@@ -39,7 +38,7 @@ export default function Signup({switchToLogin}) {
             console.log('Registered successfully!');
             setSuccessMessage('Registered successfully!')
             setErrorMessage(null);
-            setUserData({ firstName: '', lastName: '', email: '', password: '' });
+            setUserData({email: '', password: '', username: ''});
         }
         
         if(successMessage){
@@ -55,18 +54,16 @@ export default function Signup({switchToLogin}) {
       <div id="div-signup">
         <h2>Sign Up</h2>
         <ul>
-            <li>First Name</li>
-            <li><input type="text" name="firstName" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.firstName} required/></li>
-            <li>Last Name</li>
-            <li><input type="text" name="lastName" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.lastName} required/></li>
             <li>Email</li>
             <li><input type="email" name="email" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.email} required/></li>
+            <li>Username</li>
+            <li><input type="username" name="username" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.username} required/></li>
             <li>Password</li>
             <li><input type="password" name="password" className={errorMessage? "input-error" : null} onChange={handleChange} value={userData.password} required /></li>
         </ul>
         <button onClick={handleClick}>Sign Up</button>
         <div id="div-log-instead">
-            <p>Already have an account? <a onClick={switchToLogin}>LOGIN</a></p>
+            <p>Вже маєш аккаунт? <a onClick={switchToLogin}>LOGIN</a></p>
             {errorMessage ? <p className="error"><img src={errorImage} alt="" />{errorMessage}</p> : null}
             {successMessage ? <p className="success">{successMessage}</p> : null}
         </div>

@@ -1,129 +1,159 @@
 import mysql from 'mysql2';
+
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'media',
+  database: 'my_blog',
   password: 'mysqlmirrapassword'
 }).promise();
 
-// AUTHORS:
+// USERS
 
-export async function getAllAuthorsFromDataBase() {
-    const [result] = await connection.query('SELECT * FROM authors');
-    return result
+export async function getAllUsers() {
+  const [result] = await connection.query('SELECT * FROM users');
+  return result;
 }
 
-export async function getAuthorByIdFromDataBase(authorId) {
-    const [result] = await connection.query(`
-        SELECT * FROM authors
-        WHERE id=?`, [authorId]);
-    return result
+export async function getUserById(userId) {
+  const [result] = await connection.query(
+    'SELECT * FROM users WHERE id = ?',
+    [userId]
+  );
+  return result[0];
 }
 
-export async function getAuthorByEmail(authorEmail) {
-    const [result] = await connection.query(`
-        SELECT * FROM authors
-        WHERE email=?`, [authorEmail]);
-        console.log('DB:',result);
-    return result
+export async function getUserByEmail(email) {
+  const [result] = await connection.query(
+    'SELECT * FROM users WHERE email = ?',
+    [email]
+  );
+  return result[0];
 }
 
-export async function addAuthorToDataBase(author) {
-    const result = await connection.query(`
-        INSERT INTO authors (id, first_name, last_name, date_registered, email, password)
-        VALUES (?, ?, ?, ?, ?, ?);`, 
-        [author.id, author.firstName, author.lastName, author.dateRegistered, author.email, author.password])
-    return result
+export async function addUser(user) {
+  const result = await connection.query(
+    `INSERT INTO users (id, username, email, password, date_registered, profile_image, read_articles, role)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      user.id,
+      user.username,
+      user.email,
+      user.password,
+      user.date_registered,
+      user.profile_image || null,
+      user.read_articles || '[]',
+      user.role || 'user'
+    ]
+  );
+  return result;
 }
 
-export async function editAuthorById(authorId, author) {
-    const editingKeys = Object.keys(author);
-    const editingValues = Object.values(author)
-    const clause = editingKeys.map(key =>  `${key} = ?`).join(', ')
-    const sql = `
-        UPDATE authors
-        SET ${clause}
-        WHERE id = ?`
-    const result = await connection.query( `${sql}`,[...editingValues, authorId])
-    return result
+export async function editUserById(userId, user) {
+  const keys = Object.keys(user);
+  const values = Object.values(user);
+  const clause = keys.map(key => `${key} = ?`).join(', ');
+  const sql = `UPDATE users SET ${clause} WHERE id = ?`;
+
+  const result = await connection.query(sql, [...values, userId]);
+  return result;
 }
 
-export async function deleteAuthorById(authorId) {
-    const [result] = await connection.query(`DELETE FROM authors WHERE id=?;`, [authorId])
-    console.log('result deleting', result);
-    return result
+export async function deleteUserById(userId) {
+  const [result] = await connection.query('DELETE FROM users WHERE id = ?', [
+    userId
+  ]);
+  return result;
 }
 
-// ARTICLES:
+// ARTICLES
 
-export async function getAllArticlesFromDataBase() {
-    const [result] = await connection.query(`
+export async function getAllArticles() {
+  const [result] = await connection.query(`
         SELECT 
-            articles.id AS article_id,
-            articles.title,
-            articles.description,
-            articles.content,
-            articles.date_created,
-            articles.views,
-            authors.id AS author_id,
-            authors.first_name,
-            authors.last_name,
-            authors.email,
-            authors.date_registered
-        FROM articles
-        JOIN authors ON articles.author_id = authors.id
-        ORDER BY articles.date_created DESC;
-    `);
+      articles.id AS article_id,
+      articles.title,
+      articles.description,
+      articles.thumbnail_image,
+      articles.content,
+      articles.date_created,
+      articles.type,
+      articles.views,
+      articles.reading_time,
+      users.username,
+      users.profile_image
+    FROM articles
+    LEFT JOIN users ON articles.user_id = users.id
+    ORDER BY articles.date_created DESC;
+  `);
 
-    return result;
+  return result;
 }
 
+export async function getArticleById(articleId) {
+  const [result] = await connection.query(`
+    SELECT 
+      articles.id AS article_id,
+      articles.title,
+      articles.content,
+      articles.description,
+      articles.type,
+      articles.date_created,
+      articles.views,
+      articles.reading_time,
+      users.username,
+      users.profile_image
+    FROM articles
+    LEFT JOIN users ON articles.user_id = users.id
+    WHERE articles.id = ?;
+  `, [articleId]);
 
-export async function getArticleByIdFromDataBase(articleId) {
-    const [result] = await connection.query(`
-        SELECT 
-            articles.id AS article_id,
-            articles.title,
-            articles.content,
-            articles.date_created,
-            articles.views,
-            articles.reading_time,
-            authors.id AS author_id,
-            authors.first_name,
-            authors.last_name,
-            authors.email,
-            authors.date_registered
-        FROM articles
-        JOIN authors ON articles.author_id = authors.id
-        WHERE articles.id = ?;
-    `, [articleId]);
-
-    return result;
+  return result[0];
 }
 
-
-export async function addArticleToDataBase(article) {
-    const result = await connection.query(`
-        INSERT INTO articles (id, title, description, content, date_created, type, author_id, views, reading_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`, 
-        [article.id, article.title, article.description, article.content, article.date_created, article.type, article.author_id, article.views, article.reading_time])
-    return result
+export async function addArticle(article) {
+  const result = await connection.query(
+    `INSERT INTO articles (id, title, description, content, date_created, type, views, reading_time, thumbnail_image, user_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      article.id,
+      article.title,
+      article.description,
+      article.content,
+      article.date_created,
+      article.type,
+      article.views,
+      article.reading_time,
+      article.thumbnail_image,
+      article.user_id
+    ]
+  );
+  return result;
 }
 
 export async function editArticleById(articleId, article) {
-    const editingKeys = Object.keys(article);
-    const editingValues = Object.values(article)
-    const clause = editingKeys.map(key =>  `${key} = ?`).join(', ')
-    const sql = `
-        UPDATE articles
-        SET ${clause}
-        WHERE id = ?`
-    const result = await connection.query( `${sql}`,[...editingValues, articleId])
-    return result
+  const keys = Object.keys(article);
+  const values = Object.values(article);
+  const clause = keys.map(key => `${key} = ?`).join(', ');
+  const sql = `UPDATE articles SET ${clause} WHERE id = ?`;
+
+  const result = await connection.query(sql, [...values, articleId]);
+  return result;
 }
 
 export async function deleteArticleById(articleId) {
-    const [result] = await connection.query(`DELETE FROM articles WHERE id=?;`, [articleId])
-    console.log('result deleting', result);
-    return result
+  const [result] = await connection.query(
+    'DELETE FROM articles WHERE id = ?',
+    [articleId]
+  );
+  return result;
 }
+
+
+// export async function getLatestArticle() {
+//   const [result] = await connection.query(
+//     `SELECT * FROM articles
+//       ORDER BY date_created DESC
+//       LIMIT 1;`
+//   )
+//   return result
+// }

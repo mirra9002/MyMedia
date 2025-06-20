@@ -21,10 +21,33 @@
   background-color: #fafafa;
 }
 
+#div-description input {
+  width: 95%;
+  font-size: 1.5rem;
+  padding: 0.8rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+}
+
 /* Textarea for content */
 #div-content textarea {
   width: 95%;
   height: 220px;
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+  resize: vertical;
+  background-color: #fcfcfc;
+}
+
+#div-description textarea {
+  width: 95%;
+  height: 30px;
   font-size: 1rem;
   padding: 1rem;
   border-radius: 6px;
@@ -146,4 +169,18 @@ article img,
   display: block;
   margin: 1rem auto;
   border-radius: 8px;
+}
+
+#div-thumbnail {
+  margin-top: 1rem;
+}
+
+.thumbnail-preview {
+  max-width: 300px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto; /* ✅ centers block image */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

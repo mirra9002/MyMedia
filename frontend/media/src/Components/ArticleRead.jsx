@@ -13,7 +13,7 @@ export default function ArticleRead({article}) {
       <hr />
       <div className='meta'>
         <h3>Date published: <strong>{`${formatDate(article.date_created)}`}</strong></h3>
-        <h3>Author: <strong>{`${article.first_name} ${article.last_name}`}</strong></h3>
+        <h3>Author: <strong>{article.username}</strong></h3>
       </div>
       
     </>
@@ -21,7 +21,9 @@ export default function ArticleRead({article}) {
 }
 
 function formatDate(dateString) {
-  return new Date(dateString).toLocaleString('en-US', {
+  const date = new Date(dateString);
+  date.setHours(date.getHours() + 3);
+  return new Date(date).toLocaleString('uk-UK', {
     month: 'short',
     day: '2-digit',
     year: 'numeric',
