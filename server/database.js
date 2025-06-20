@@ -73,7 +73,10 @@ export async function getAllArticles() {
       articles.id AS article_id,
       articles.title,
       articles.description,
+<<<<<<< HEAD
       articles.thumbnail_image,
+=======
+>>>>>>> 473127c3a78019e145dab0f265a3963f330b07eb
       articles.content,
       articles.date_created,
       articles.type,

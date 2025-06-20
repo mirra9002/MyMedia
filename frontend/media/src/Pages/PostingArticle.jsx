@@ -36,6 +36,10 @@ export default function PostingArticle() {
   async function handleSubmit(articleData) {
     const obj = {
       ...articleData,
+<<<<<<< HEAD
+=======
+      description: '',
+>>>>>>> 473127c3a78019e145dab0f265a3963f330b07eb
       date_created: toSQLDateString(new Date()),
       user_id: userData.id
     };
