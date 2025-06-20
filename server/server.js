@@ -1,10 +1,10 @@
 import express from 'express'
 import cors from 'cors'
-import {addAuthorToDataBase, getAllAuthorsFromDataBase, getAuthorByIdFromDataBase, editAuthorById, deleteAuthorById,
-    getAllArticlesFromDataBase, getArticleByIdFromDataBase, addArticleToDataBase, editArticleById, deleteArticleById,
-    getAuthorByEmail
+import {addUser, getAllUsers, getUserById, editUserById, deleteUserById,
+    getAllArticles, getArticleById, addArticle, editArticleById, deleteArticleById,
+    getUserByEmail
 } from './database.js'
-import { validateAddAuthor, validateEditAuthor, validateAddArticle, validateEditArticle, validateLoginAuthor } from './validation.js'
+import { validateAddUser, validateEditUser, validateAddArticle, validateEditArticle, validateLoginUser } from './validation.js'
 import { randomUUID } from 'crypto'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -25,63 +25,60 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-// AUTHORS:
+// USERS
 
-// get all authors
-app.get('/authors', async (req, res) => {
-
+// get all users
+app.get('/users', async (req, res) => {
     res.set('Content-type', 'application/json')
-    // const obj = getAuthorsFromFile()
-    // res.send(JSON.stringify(obj))
-    const result = await getAllAuthorsFromDataBase();
+    const result = await getAllUsers();
     console.log(result);
     res.send(JSON.stringify(result))
 })
 
 
-// get author by ID
-app.get('/author/:id', async (req, res) => {
+// get user by ID
+app.get('/user/:id', async (req, res) => {
     res.set('Content-type', 'application/json')
-    const authorId = req.params.id
-    const author = await getAuthorByIdFromDataBase(authorId)
-    console.log(author);
-    if(!author){
+    const userId = req.params.id
+    const user = await getUserById(userId)
+    console.log(user);
+    if(!user){
         res.status(404).send({message: "failed"}) 
         return
     }
-    res.send(JSON.stringify(author))
+    res.send(JSON.stringify(user))
 })
 
 
-// add new author
-app.post('/author', async (req, res) => {
+// add new user
+app.post('/user', async (req, res) => {
     const data = req.body
     console.log(data);
-    const isValid = validateAddAuthor(data)
+    const isValid = validateAddUser(data)
     if(isValid.error != null){
         res.status(422).send({message: isValid.error}) 
         return
     } else {
-        console.log('author:', {...isValid.object, id: randomUUID()});
-        const result = await addAuthorToDataBase({...isValid.object, id: randomUUID()})
+        console.log('user:', {...isValid.object, id: randomUUID()});
+        const result = await addUser({...isValid.object, id: randomUUID()})
         res.send({message: "success", result: result})
     }
    
 })
 
 
-// edit author by id
-app.patch('/author/:id', async (req, res) => {
+// edit user by id
+app.patch('/user/:id', async (req, res) => {
     const data = req.body;
-    const authorId = req.params.id
+    const userId = req.params.id
     
-    const isValid = validateEditAuthor(data)
+    const isValid = validateEditUser(data)
     if(isValid.error != null){
         res.status(422).send({message: isValid.error}) 
         return
     }
 
-    const result = await editAuthorById(authorId, isValid.object)   
+    const result = await editUserById(userId, isValid.object)   
     
     if(!result){
         res.status(404).send({message: "failed"}) 
@@ -91,10 +88,10 @@ app.patch('/author/:id', async (req, res) => {
 })
 
 
-// delete author by id
-app.delete('/author/:id', async (req, res) => {
-    const authorId = req.params.id
-    const result = await deleteAuthorById(authorId)
+// delete user by id
+app.delete('/user/:id', async (req, res) => {
+    const userId = req.params.id
+    const result = await deleteUserById(userId)
     if(!result || result.affectedRows === 0){
         res.status(404).send({message: "failed"}) 
         return
@@ -107,15 +104,15 @@ app.delete('/author/:id', async (req, res) => {
 
 app.get('/articles', async (req, res) => {
     res.set('Content-type', 'application/json')
-    const result = await getAllArticlesFromDataBase();
+    const result = await getAllArticles();
     res.send(JSON.stringify(result))
 })
 
 app.get('/article/:id', async (req, res) => {
     res.set('Content-type', 'application/json')
     const articleId = req.params.id
-    const article = await getArticleByIdFromDataBase(articleId)
-    
+    const article = await getArticleById(articleId)
+    console.log('article', article);
     if(!article){
         res.status(404).send({message: "failed"}) 
         return
@@ -131,8 +128,8 @@ app.post('/article', async (req, res) => {
         res.status(422).send({message: isValid.error}) 
         return
     } else {
-        console.log('author:', {...isValid.object, id: randomUUID()});
-        const result = await addArticleToDataBase({...isValid.object, id: randomUUID()})
+        console.log('user:', {...isValid.object, id: randomUUID()});
+        const result = await addArticle({...isValid.object, id: randomUUID()})
         res.send({message: "success", result: result})
     }
    
@@ -176,13 +173,13 @@ app.delete('/article/:id', async (req, res) => {
 app.post('/register', async (req, res) => {
     const data = req.body
     console.log(data);
-    const isValid = validateAddAuthor(data)
+    const isValid = validateAddUser(data)
     if(isValid.error != null){
         res.status(422).send({message: isValid.error}) 
         return
     } 
-    const author = await getAuthorByEmail(data.email);
-    if(author.length > 0) {
+    const user = await getUserByEmail(data.email);
+    if(user) {
         res.status(422).send({message: "user already exists"}) 
         return
     }
@@ -190,7 +187,7 @@ app.post('/register', async (req, res) => {
     const password = data.password;
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    const result = await addAuthorToDataBase({...isValid.object, password: hashedPassword, id: randomUUID()})
+    const result = await addUser({...isValid.object, password: hashedPassword, id: randomUUID()})
     res.send({message: "success", result: result})
 })
 
@@ -202,18 +199,18 @@ const DB_TOKENS = [
 app.post('/login', async (req, res) => {
     const data = req.body;
     console.log(data);
-    const isValid = validateLoginAuthor(data)
+    const isValid = validateLoginUser(data)
     if(isValid.error != null){
         res.status(422).send({message: isValid.error}) 
         return
     } 
-    const author = await getAuthorByEmail(data.email);
-    if(author.length === 0) {
+    const user = await getUserByEmail(data.email);
+    if(user.length === 0) {
         res.status(422).send({message: "User not found"}) 
         return
     }
     console.log('isValid:', isValid);    
-    const passwordIsValid = await bcrypt.compare(isValid.object.password, author[0].password);
+    const passwordIsValid = await bcrypt.compare(isValid.object.password, user.password);
     if(!passwordIsValid){
         res.status(401).send({message: "Incorrect password"}) 
         return
@@ -224,12 +221,12 @@ app.post('/login', async (req, res) => {
     console.log('access:', accessToken, 'refresh:', refreshToken);
     // add tokens to DB (???)
 
-    DB_TOKENS.push({author_id: author.id, token: refreshToken})
+    DB_TOKENS.push({user_id: user.id, token: refreshToken})
     res.send({
         message: 'success',
         accessToken,
         refreshToken,
-        user: { id: author[0].id, email: author[0].email }
+        user: { id: user.id, email: user.email }
     });
 
 })
@@ -253,12 +250,12 @@ app.post('/refresh', (req, res) => {
 app.get('/myprofile', authMiddlware, async (req, res) => {
   const userEmail = req.user.email;
   console.log('user email:', userEmail);
-  const author = await getAuthorByEmail(userEmail);
-  console.log('author:', author);
-  if (!author || author.length === 0) {
+  const user = await getUserByEmail(userEmail);
+  console.log('user:', user);
+  if (!user || user.length === 0) {
     return res.status(404).send({ message: "User not found" });
   }
-  res.send(author[0]);
+  res.send(user);
 });
 
 
@@ -279,3 +276,13 @@ function authMiddlware(req, res, next) {
         return res.status(403).send({ message: 'Invalid or expired token' });
     }
 }
+
+// app.get('/latest-article', async (req, res) => {
+//     const article = await getLatestArticle();
+//     console.log(article);
+//     if(!article){
+//         return res.status(400).send({ message: 'Could not find latest article' });
+//     }
+    
+//     res.status(200).send({message: "success", content: article})
+// })

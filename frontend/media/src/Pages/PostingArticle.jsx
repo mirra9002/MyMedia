@@ -2,26 +2,27 @@ import Header from "../Components/Header";
 import ArticleEditor from '../Components/ArticleEditor';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import fetchWithAuth from '../utils/auth';
 
 export default function PostingArticle() {
-  const [thumbnailImage, setThumbnailImage] = useState(null);
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({})
+
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
       window.location.href = '/auth'; // redirect to login/signup
       return
     }
-  }, []);
-  
   useEffect(() => {
     async function getUser() {
       try {
         const res = await fetchWithAuth('http://localhost:3000/myprofile');
         const data = await res.json();
         console.log('USER', data);
-        setUser(data);
+        setUserData(data)
+        
       } catch (err) {
         console.error('Auth error:', err);
         window.location.href = '/auth'; // redirect if unauthorized
@@ -31,16 +32,15 @@ export default function PostingArticle() {
     getUser();
   }, []);
 
+  
   async function handleSubmit(articleData) {
-    console.log('IN OBJEEECT:', user.id);
     const obj = {
       ...articleData,
-      description: thumbnailImage,
-      date_created: new Date().toDateString(),
-      reading_time: Math.round(articleData.content.length / 100),
-      views: 0,
-      author_id: (user?.id).toString()
+      description: '',
+      date_created: toSQLDateString(new Date()),
+      user_id: userData.id
     };
+    console.log('obj:', obj);
 
     try {
       const res = await fetch('http://localhost:3000/article', {
@@ -54,17 +54,27 @@ export default function PostingArticle() {
     } catch (err) {
       console.error(err);
       alert('Error submitting article.');
+      return false
     }
+    return true
   }
-  if(!user) return
+  if(userData.role != 'admin') {
+    return <><p>Вибач, але наразі ти не можеш публікувати статті...</p>
+    <p>Але ти можеш попрохати <strong>mirra9002@gmail.com</strong> дати тобі дозвіл!</p>
+    <button onClick={() => navigate('/')}>На головну</button> </>
+    
+  }
   return (
     <>
       <Header />
       <ArticleEditor
         onSubmit={handleSubmit}
-        thumbnailImage={thumbnailImage}
-        setThumbnailImage={setThumbnailImage}
       />
     </>
   );
+}
+
+
+function toSQLDateString(date) {
+  return date.toISOString().slice(0, 19).replace('T', ' ');
 }

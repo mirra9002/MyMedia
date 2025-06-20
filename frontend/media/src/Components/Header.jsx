@@ -13,16 +13,16 @@ export default function Header() {
 
       <nav className="header-center">
         <ul className="nav-list">
-          <li onClick={() => navigate('/news')}>News</li>
-          <li onClick={() => navigate('/history')}>History</li>
-          <li onClick={() => navigate('/analyzes')}>Analyzes</li>
-          <li onClick={() => navigate('/interviews')}>Interviews</li>
+          <li onClick={() => navigate('/news')}>Новини</li>
+          <li onClick={() => navigate('/history')}>Історія</li>
+          <li onClick={() => navigate('/analyzes')}>Розбори</li>
+          <li onClick={() => navigate('/interviews')}>Інтерв'ю</li>
         </ul>
       </nav>
 
       <div className="header-right">
         <span className="my-account" onClick={() => navigate('/myprofile')}><img src={accountImage}></img></span>
-        <button className="post-article" onClick={() => navigate('/newarticle')}>POST article</button>
+        <button className="post-article" onClick={() => navigate('/newarticle')}>Написати статтю</button>
       </div>
       
     </header>

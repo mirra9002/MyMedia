@@ -11,7 +11,8 @@ export default function Article() {
         async function fetchArticle() {
             const article = await getArticle(articleId)
             const jsonArticle = await article.json()
-            setArticle(jsonArticle[0])   
+            setArticle(jsonArticle)   
+            console.log('ARTICLE:', jsonArticle);
         }
         fetchArticle()
     }, []) 

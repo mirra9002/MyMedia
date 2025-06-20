@@ -1,17 +1,17 @@
 import './ArticlePreview.css'
 
-export default function ArticlePreview({title, description, content, first_name, last_name, onClick}) {
+export default function ArticlePreview({title, description, content, username, profile_image, onClick}) {
   const thumbnailImage = description;
 console.log('thumbnailImage:', thumbnailImage);
 console.log('isimage:', isImageLink(thumbnailImage));
-
+console.log('username: ', username);
   return (
     <div id="div-article" onClick={onClick}>
       {isImageLink(thumbnailImage) && (
         <img src={thumbnailImage} alt="Thumbnail image" />
       )}
       <h1>{title}</h1>
-      <p>{first_name && last_name ? `${first_name} ${last_name}` : 'народна творчість'}</p>
+      <p>{username ? username : 'народна творчість'}</p>
     </div>
   );
 }

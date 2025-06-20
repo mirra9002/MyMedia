@@ -2,21 +2,31 @@ import ReactMarkdown from 'react-markdown';
 import './ArticleEditor.css'
 import { useRef, useState } from 'react';
 
-export default function ArticleEditor({ onSubmit, thumbnailImage, setThumbnailImage }) {
+export default function ArticleEditor({ onSubmit }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [articleType, setArticleType] = useState('');
   const [textType, setTextType] = useState(null)
-  function handleSubmit() {
+  const [thumbnailImage, setThumbnailImage] = useState(null);
+  
+
+  async function handleSubmit() {
     const articleData = {
       title,
       content: text,
       type: articleType,
+      thumbnail_image: thumbnailImage || 'no_image'
     };
-    onSubmit(articleData);
-    setTitle('');
-    setText('');
-    setArticleType('');
+
+    const res = await onSubmit(articleData);  // now this is awaited properly
+
+    if (res) {
+      setTitle('');
+      setText('');
+      setThumbnailImage('');
+    }
+
+    console.log(res);
   }
 
   return (
